@@ -56,7 +56,7 @@ functions:
         Action:
           - dynamodb:Query
         Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}/index/${self:provider.environment.ItemITEM_TABLE_GSI}
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}/index/${self:provider.environment.ITEM_TABLE_GSI}
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
