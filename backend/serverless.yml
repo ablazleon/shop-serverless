@@ -28,9 +28,9 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment:
-    ITEM_TABLE: item-rbl-${self:provider.stage}
+    ITEM_TABLE: items-rbl-${self:provider.stage}
     ITEM_TABLE_GSI: byUserIdGsi
-    ITEM_S3_BUCKET_NAME: item-rbl-attachments-${self:provider.stage}
+    ITEM_S3_BUCKET_NAME: items-rbl-attachments-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
   tracing:
