@@ -2,9 +2,9 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import {getUserIdFromEvent} from "../../auth/utils";
-import {TodoAccess} from "../../utils/TodoAccess";
+import {ItemAccess} from "../../utils/ItemAccess";
 
-const todoAccess = new TodoAccess();
+const itemAccess = new ItemAccess();
 
 /**
  * Get dodos
@@ -13,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   // TODO: Get all TODO items for a current user
     const userId = getUserIdFromEvent(event);
 
-    const todos = await todoAccess.getTodos(userId);
+    const items = await itemAccess.getItems(userId);
 
     // Send results
     return {
@@ -22,7 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
-            items: todos
+            items: items
         })
     }
 };

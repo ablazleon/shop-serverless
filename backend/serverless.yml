@@ -1,5 +1,5 @@
 service:
-  name: serverless-todo-app
+  name: serverless-shop-app
 
 plugins:
   - serverless-webpack
@@ -10,15 +10,15 @@ documentation:
   api:
     info:
       version: v1.0.0
-      title: ToDos API
-      description: serverless api for ToDo application
+      title: Shop API
+      description: serverless api for Item application
   models:
-    - name: CreateTodo
+    - name: CreateItem
       contentType: application/json
-      schema: ${file(src/validators/create-todo-request.json)}
-    - name: UpdateTodo
+      schema: ${file(src/validators/create-item-request.json)}
+    - name: UpdateItem
       contentType: application/json
-      schema: ${file(src/validators/update-todo-request.json)}
+      schema: ${file(src/validators/update-Item-request.json)}
 
 provider:
   name: aws
@@ -28,9 +28,9 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment:
-    TODOITEM_TABLE: Todoitem-rbl-${self:provider.stage}
-    TODOITEM_TABLE_GSI: byUserIdGsi
-    TODOITEM_S3_BUCKET_NAME: todoitem-rbl-attachments-${self:provider.stage}
+    ITEM_TABLE: item-rbl-${self:provider.stage}
+    ITEM_TABLE_GSI: byUserIdGsi
+    ITEM_S3_BUCKET_NAME: item-rbl-attachments-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
   tracing:
@@ -42,13 +42,13 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  # Item: Configure this function
+  GetItems:
+    handler: src/lambda/http/getItems.handler
     events:
       - http:
           method: get
-          path: todos
+          path: Items
           authorizer: Auth
           cors: true
     iamRoleStatements:
@@ -56,7 +56,7 @@ functions:
         Action:
           - dynamodb:Query
         Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOITEM_TABLE}/index/${self:provider.environment.TODOITEM_TABLE_GSI}
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}/index/${self:provider.environment.ItemITEM_TABLE_GSI}
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
@@ -72,27 +72,27 @@ functions:
         Resource:
           - "*"
 
-  # TODO: Configure this function
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+  # Item: Configure this function
+  CreateItem:
+    handler: src/lambda/http/createItem.handler
     events:
       - http:
           method: post
-          path: todos
+          path: Items
           authorizer: Auth
           cors: true
           reqValidatorName: RequestBodyValidator
           documentation:
-            summary: Create todo item
-            description: Create a todo item
+            summary: Create Item
+            description: Create an item
             requestModels:
-              'application/json': CreateTodoRequest
+              'application/json': CreateItemRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:putItem
         Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOITEM_TABLE}
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
@@ -108,27 +108,27 @@ functions:
         Resource:
           - "*"
 
-  # TODO: Configure this function
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+  # Item: Configure this function
+  UpdateItem:
+    handler: src/lambda/http/updateItem.handler
     events:
       - http:
           method: patch
-          path: todos/{todoId}
+          path: Items/{ItemId}
           authorizer: Auth
           cors: true
           reqValidatorName: RequestBodyValidator
           documentation:
-            summary: update a todo item
-            description: update a todo item
+            summary: update a Item item
+            description: update a Item item
             requestModels:
-              'application/json': UpdateTodo
+              'application/json': UpdateItem
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:updateItem
         Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOITEM_TABLE}
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
@@ -144,13 +144,13 @@ functions:
         Resource:
           - "*"
 
-  # TODO: Configure this function
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+  # Item: Configure this function
+  DeleteItem:
+    handler: src/lambda/http/deleteItem.handler
     events:
       - http:
           method: delete
-          path: todos/{todoId}
+          path: Items/{ItemId}
           authorizer: Auth
           cors: true
     iamRoleStatements:
@@ -158,7 +158,7 @@ functions:
         Action:
           - dynamodb:deleteItem
         Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOITEM_TABLE}
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
@@ -174,25 +174,25 @@ functions:
         Resource:
           - "*"
 
-  # TODO: Configure this function
+  # Item: Configure this function
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
       - http:
           method: post
-          path: todos/{todoId}/attachment
+          path: Items/{ItemId}/attachment
           authorizer: Auth
           cors: true
     iamRoleStatements:
       - Effect: Allow
         Action:
           - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.TODOITEM_S3_BUCKET_NAME}/*
+        Resource: arn:aws:s3:::${self:provider.environment.ITEM_S3_BUCKET_NAME}/*
       - Effect: Allow
         Action:
           - dynamodb:updateItem
         Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOITEM_TABLE}
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}
       - Effect: Allow
         Action:
           - xray:GetSamplingRules
@@ -210,7 +210,7 @@ functions:
 
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
+    # Item: Add any necessary AWS resources
 
     RequestBodyValidator:
       Type: AWS::ApiGateway::RequestValidator
@@ -235,7 +235,7 @@ resources:
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.TODOITEM_S3_BUCKET_NAME}
+        BucketName: ${self:provider.environment.ITEM_S3_BUCKET_NAME}
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
@@ -261,26 +261,26 @@ resources:
               Effect: Allow
               Principal: '*'
               Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.TODOITEM_S3_BUCKET_NAME}/*'
+              Resource: 'arn:aws:s3:::${self:provider.environment.ITEM_S3_BUCKET_NAME}/*'
         Bucket: !Ref AttachmentsBucket
 
-    TodoItemTable:
+    ItemItemTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TODOITEM_TABLE}
+        TableName: ${self:provider.environment.ITEM_TABLE}
         AttributeDefinitions:
-          - AttributeName: todoId
+          - AttributeName: ItemId
             AttributeType: S
           - AttributeName: userId
             AttributeType: S
         KeySchema:
-          - AttributeName: todoId
+          - AttributeName: ItemId
             KeyType: HASH
           - AttributeName: userId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.TODOITEM_TABLE_GSI}
+          - IndexName: ${self:provider.environment.ITEM_TABLE_GSI}
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH

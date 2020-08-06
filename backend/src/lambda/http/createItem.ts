@@ -3,21 +3,21 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import { getUserIdFromEvent } from '../../auth/utils'
-import {TodoAccess} from "../../utils/TodoAccess";
+import {ItemAccess} from "../../utils/ItemAccess";
 
 /**
  * Create a todo
  **/
 
-const todoAccess = new TodoAccess();
+const itemAccess = new ItemAccess();
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const newTodo: CreateTodoRequest = JSON.parse(event.body)
+  const newItem: CreateItemRequest = JSON.parse(event.body)
 
   const userId = getUserIdFromEvent(event);
 
   // TODO: Implement creating a new TODO item
-  const todoId = await todoAccess.createTodo(userId, newTodo);
+  const itemId = await itemAccess.createItem(userId, newItem);
 
   return {
     statusCode: 201,
@@ -27,8 +27,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     body: JSON.stringify({
       item:
           {
-            todoId: todoId,
-            ...newTodo
+            todoId: itemId,
+            ...newItem
           }
     })
   };

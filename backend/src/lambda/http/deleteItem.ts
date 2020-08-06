@@ -2,18 +2,18 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
-import {TodoAccess} from "../../utils/TodoAccess";
+import {ItemAccess} from "../../utils/ItemAccess";
 
-const todoAccess = new TodoAccess();
+const itemAccess = new itemAccess();
 
 /**
  * Delete a todo
  */
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const itemId = event.pathParameters.itemId
 
   // TODO: Remove a TODO item by id
-  await todoAccess.deleteTodo(todoId);
+  await itemAccess.deleteTodo(itemId);
 
   return {
     statusCode: 202,

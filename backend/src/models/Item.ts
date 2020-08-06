@@ -1,9 +1,8 @@
 export interface TodoItem {
   userId: string
-  todoId: string
+  itemId: string
   createdAt: string
   name: string
-  dueDate: string
-  done: boolean
+  price: string
   attachmentUrl?: string
 }

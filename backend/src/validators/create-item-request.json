@@ -1,18 +1,18 @@
 {
     "$schema" : "http://json-schema.org/draft-04/schema#",
-    "title": "create-todo",
+    "title": "create-item",
     "type":"object",
     "properties": {
         "name":{
             "type":"string"
         },
-        "dueDate":{
+        "price":{
             "type":"string"
         }
     },
     "required":[
         "name",
-        "dueDate"
+        "price"
     ],
     "additionalProperties": false
 }

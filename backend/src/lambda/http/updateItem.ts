@@ -11,12 +11,12 @@ const todoAccess = new TodoAccess();
  * Update todos
  */
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
-  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+  const itemId = event.pathParameters.todoId
+  const updatedItem: UpdateItemRequest = JSON.parse(event.body)
 
   // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
 
-  await todoAccess.updateTodo(todoId, updatedTodo);
+  await itemAccess.updateItem(itemId, updatedItem);
 
   return {
     statusCode: 202,

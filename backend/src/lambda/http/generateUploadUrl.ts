@@ -12,26 +12,26 @@ const logger = createLogger('generateUploadUrl')
 
 const XAWS = AWSXRay.captureAWS(AWS);
 
-const bucketName = process.env.TODOITEM_S3_BUCKET_NAME;
+const bucketName = process.env.ITEM_S3_BUCKET_NAME;
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION;
 const s3 = new XAWS.S3({
   signatureVersion: 'v4'
 });
 
-import {TodoAccess} from "../../utils/TodoAccess";
+import {ItemAccess} from "../../utils/ItemAccess";
 
-const todoAccess = new TodoAccess();
+const itemAccess = new ItemAccess();
 
 /**
  * Generate a signed url to upload images to s3
  */
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const itemId = event.pathParameters.todoId
   const userId = getUserId(event);
   const attachmentId = uuid.v4();
 
   logger.info("Generated upload URL:", {
-    todoId: todoId,
+    itemId: itemId,
     attachmentId: attachmentId
   });
 
@@ -42,7 +42,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   });
 
   // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-  await todoAccess.updateTodoAttachmentUrl(todoId, userId, attachmentId);
+  await itemAccess.updateItemAttachmentUrl(itemId, userId, attachmentId);
 
   return {
     statusCode: 200,
