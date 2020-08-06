@@ -1,6 +1,6 @@
 # Serverless TODO
 
-Serverless to-do app
+Serverless shop app
 
 <img src="http://yuml.me/diagram/plain/class/[Frontend]<->[Backend], [Backend]<->[Auth, CreateTodo, UpdateTodo, GetTodos, DeleteTodo, GenerateUploadUrl{bg:wheat}], [Backend]<->[DB (Dynamo DB, TODOs)]" >
 
@@ -18,7 +18,7 @@ Udacity Cloud Developer Nanodegree Program
 
 ## Intro
 
-To implement this project, you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all comments starting with the `TODO:` in the code to find the placeholders that you need to implement.
+
 
 # Functionality of the application
 
