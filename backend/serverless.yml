@@ -44,7 +44,7 @@ functions:
 
   # Item: Configure this function
   GetItems:
-    handler: src/lambda/http/getItems.handler
+    handler: src/lambda/http/getItem.handler
     events:
       - http:
           method: get
